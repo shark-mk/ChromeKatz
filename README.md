@@ -26,6 +26,16 @@ There are few perks in accessing credentials in this way.:
 
 This solution consists of three projects, **CredentialKatz** that is a PE executable, **CredentialKatz-BOF** the Beacon Object File version and **CredentialKatzMinidump** which is the minidump parser.
 
+### Supported Versions
+
+**CredentialKatz currently supports Chrome/Edge versions 122 through 131.**
+
+- **Chrome 122 - 131**: Fully supported ✅
+- **Chrome 132+**: Not yet supported ⚠️ (internal memory structures changed)
+- **Chrome < 122**: Not supported
+
+If you encounter issues with the latest Chrome versions (132+), the tool will display an error message explaining the version limitation. Please use Chrome/Edge version 131 or earlier until support for newer versions is added.
+
 ## Usage
 
 NOTE! When choosing using PID to target, use commands /list or cookie-katz-find respectively to choose the right subprocess!

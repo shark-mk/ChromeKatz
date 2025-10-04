@@ -108,17 +108,32 @@ int main(int argc, char* argv[]) {
 	WORD highMinor = HIWORD(fileInfo.ProductVersionLS);
 
 	//Update config based on target version
+	// Chrome 122-131 supported, Chrome 132+ has changed internal structures
 	if (targetConfig == Chrome) {
+		if (highMajor >= 132) {
+			PRINT("[-] Chrome version %hu is not yet supported!\n", highMajor);
+			PRINT("[-] Chrome 132+ changed internal memory structures for credential storage.\n");
+			PRINT("[-] Please use Chrome version 131 or earlier, or wait for tool update.\n");
+			return 0;
+		}
 		if ((highMajor == 122 && highMinor <= 6260) ||
 			(highMajor < 122)) {
 			PRINT("[-] This browser version is not supported!\n");
+			PRINT("[-] Please use Chrome version 122 or newer (up to 131).\n");
 			return 0;
 		}
 	}
 	else if (targetConfig == Edge || targetConfig == Webview2) {
+		if (highMajor >= 132) {
+			PRINT("[-] Edge version %hu is not yet supported!\n", highMajor);
+			PRINT("[-] Edge 132+ changed internal memory structures for credential storage.\n");
+			PRINT("[-] Please use Edge version 131 or earlier, or wait for tool update.\n");
+			return 0;
+		}
 		if ((highMajor == 122 && highMinor <= 6260) ||
 			(highMajor < 122)) { //Honestly no idea, these haven't been tested
 			PRINT("[-] This browser version is not supported!\n");
+			PRINT("[-] Please use Edge version 122 or newer (up to 131).\n");
 			return 0;
 		}
 	}
