@@ -112,6 +112,8 @@ extern "C" {
         }
 
         //Versions and configs
+        // 122.0.6260.0 >= Chrome <= 131.x
+        // Chrome 132+ has changed internal structures and is not yet supported
         // 125.0.6388.0 >= Chrome
         // 125.0.6387.0 <= Chrome124
         // 124.0.6329.0 >= Chrome124
@@ -131,16 +133,30 @@ extern "C" {
 
         //Update config based on target version
         if (targetBrowser == Chrome) {
+            if (browserVersion.highMajor >= 132) {
+                BeaconPrintf(CALLBACK_ERROR, "Chrome version %hu is not yet supported!\n", browserVersion.highMajor);
+                BeaconPrintf(CALLBACK_ERROR, "Chrome 132+ changed internal memory structures for credential storage.\n");
+                BeaconPrintf(CALLBACK_ERROR, "Please use Chrome version 131 or earlier, or wait for tool update.\n");
+                return;
+            }
             if ((browserVersion.highMajor == 122 && browserVersion.highMinor <= 6260) ||
                 (browserVersion.highMajor < 122)) {
                 BeaconPrintf(CALLBACK_ERROR, "This browser version is not supported!\n");
+                BeaconPrintf(CALLBACK_ERROR, "Please use Chrome version 122 or newer (up to 131).\n");
                 return ;
             }
         }
         else if (targetBrowser == Edge || targetBrowser == Webview2) {
+            if (browserVersion.highMajor >= 132) {
+                BeaconPrintf(CALLBACK_ERROR, "Edge version %hu is not yet supported!\n", browserVersion.highMajor);
+                BeaconPrintf(CALLBACK_ERROR, "Edge 132+ changed internal memory structures for credential storage.\n");
+                BeaconPrintf(CALLBACK_ERROR, "Please use Edge version 131 or earlier, or wait for tool update.\n");
+                return;
+            }
             if ((browserVersion.highMajor == 122 && browserVersion.highMinor <= 6260) ||
                 (browserVersion.highMajor < 122)) { //Honestly no idea, these haven't been tested
                 BeaconPrintf(CALLBACK_ERROR, "This browser version is not supported!\n");
+                BeaconPrintf(CALLBACK_ERROR, "Please use Edge version 122 or newer (up to 131).\n");
                 return ;
             }
         }

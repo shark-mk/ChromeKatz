@@ -159,7 +159,8 @@ int main(int argc, char* argv[]) {
 #endif
 
     //Working versions
-    // 122.0.6260.0 >= Chrome
+    // 122.0.6260.0 >= Chrome <= 131.x
+    // Chrome 132+ has changed internal structures and is not yet supported
     // XXX.X.XXXX.X >= Edge ?? Hard to test
     BrowserVersion browserVersion = { 0 };
     if (!GetBrowserVersion(hProcess, browserVersion)) {
@@ -169,16 +170,30 @@ int main(int argc, char* argv[]) {
 
     //Update config based on target version
     if (targetConfig == Chrome) {
+        if (browserVersion.highMajor >= 132) {
+            PRINT("[-] Chrome version %hu is not yet supported!\n", browserVersion.highMajor);
+            PRINT("[-] Chrome 132+ changed internal memory structures for credential storage.\n");
+            PRINT("[-] Please use Chrome version 131 or earlier, or wait for tool update.\n");
+            return 0;
+        }
         if ((browserVersion.highMajor == 122 && browserVersion.highMinor <= 6260) ||
             (browserVersion.highMajor < 122)) {
             PRINT("[-] This browser version is not supported!\n");
+            PRINT("[-] Please use Chrome version 122 or newer (up to 131).\n");
             return 0;
         }
     }
     else if (targetConfig == Edge || targetConfig == Webview2) {
+        if (browserVersion.highMajor >= 132) {
+            PRINT("[-] Edge version %hu is not yet supported!\n", browserVersion.highMajor);
+            PRINT("[-] Edge 132+ changed internal memory structures for credential storage.\n");
+            PRINT("[-] Please use Edge version 131 or earlier, or wait for tool update.\n");
+            return 0;
+        }
         if ((browserVersion.highMajor == 122 && browserVersion.highMinor <= 6260) ||
             (browserVersion.highMajor < 122)) { //Honestly no idea, these haven't been tested
             PRINT("[-] This browser version is not supported!\n");
+            PRINT("[-] Please use Edge version 122 or newer (up to 131).\n");
             return 0;
         }
     }
